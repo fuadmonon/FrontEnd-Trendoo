@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trendoo - Premium Sneakers & Watches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'trendoo-primary': '#0f0f0f',
+                        'trendoo-secondary': '#ff6b35',
+                        'trendoo-accent': '#1a1a1a',
+                        'trendoo-light': '#f8f9fa',
+                        'trendoo-dark': '#111111',
+                        'trendoo-gray': '#6b7280',
+                        'trendoo-light-gray': '#f3f4f6'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                        'bounce-subtle': 'bounceSubtle 0.6s ease-out',
+                        'slide-in-right': 'slideInRight 0.4s ease-out',
+                        'slide-in-left': 'slideInLeft 0.4s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'page-transition': 'pageTransition 0.3s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pageTransition: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+        }
+        .search-glow {
+            transition: all 0.3s ease;
+        }
+        .search-glow:focus {
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Smooth navigation styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .screen {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform-origin: center;
+        }
+        
+        .screen.hidden {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+        
+        .screen.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
+        }
+        
+        /* Prevent layout shifts and shaking */
+        .brand-products-container {
+            min-height: 400px;
+            transition: none;
+        }
+        
+        .product-card img {
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        .screen {
+            will-change: opacity, transform;
+        }
+        
+        /* Reduce animation conflicts */
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 font-inter">
+    <!-- Header -->
+    <header class="sticky top-0 z-50">
+        <!-- Top Bar -->
+        <div class="gradient-bg text-white py-3">
+            <div class="container mx-auto px-4 flex justify-between items-center text-sm">
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-trendoo-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-gem text-white text-sm"></i>
+                        </div>
+                        <span class="font-bold text-lg">Trendoo</span>
+                    </div>
+                    <span class="hidden md:block text-gray-300">Premium Sneakers & Luxury Watches</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4 lg:space-x-6 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-envelope text-trendoo-secondary"></i>
+                        <span class="hidden lg:inline">trendoo.ownyouryouth@gmail.com</span>
+                        <span class="lg:hidden">Email Us</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-phone text-trendoo-secondary"></i>
+                        <span class="hidden lg:inline">+8801640475515</span>
+                        <span class="lg:hidden">Call Us</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <button class="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                    <button class="bg-trendoo-secondary px-4 py-2 rounded-lg hover:bg-orange-600 transition-all hover:shadow-lg">
+                        Get in touch
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-trendoo-secondary to-orange-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-gem text-white"></i>
+                            </div>
+                            <h1 class="text-2xl font-bold bg-gradient-to-r from-trendoo-primary to-trendoo-secondary bg-clip-text text-transparent">Trendoo</h1>
+                        </div>
+                        <div class="hidden lg:flex space-x-8">
+                            <a href="#" class="nav-link font-medium text-gray-700 hover:text-trendoo-secondary transition-all duration-300 relative group" data-section="home">
+                                <span>Categories</span>
+                                <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-trendoo-secondary transition-all duration-300 group-hover:w-full"></div>
+                            </a>
+                            <a href="#" class="nav-link font-medium text-gray-700 hover:text-trendoo-secondary transition-all duration-300 relative group" data-section="deals">
+                                <span>Deals</span>
+                                <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-trendoo-secondary transition-all duration-300 group-hover:w-full"></div>
+                            </a>
+                            <a href="#" class="nav-link font-medium text-gray-700 hover:text-trendoo-secondary transition-all duration-300 relative group" data-section="new">
+                                <span>What's New</span>
+                                <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-trendoo-secondary transition-all duration-300 group-hover:w-full"></div>
+                            </a>
+                            <a href="#" class="nav-link font-medium text-gray-700 hover:text-trendoo-secondary transition-all duration-300 relative group" onclick="goBackToPrevious()">
+                                <span>Windows</span>
+                                <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-trendoo-secondary transition-all duration-300 group-hover:w-full"></div>
+                            </a>
+                            <a href="#" class="font-medium text-gray-700 hover:text-trendoo-secondary transition-all duration-300 relative group">
+                                <span>Delivery</span>
+                                <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-trendoo-secondary transition-all duration-300 group-hover:w-full"></div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 flex-1 max-w-lg mx-6">
+                        <div class="relative flex-1">
+                            <div class="relative">
+                                <input type="text" id="searchInput" placeholder="Search for sneakers, watches, brands..." 
+                                       class="w-full px-6 py-3 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-trendoo-secondary focus:bg-white search-glow transition-all duration-300">
+                                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                                    <i class="fas fa-search text-gray-400"></i>
+                                </div>
+                                <div id="searchResults" class="absolute top-full left-0 right-0 bg-white rounded-2xl shadow-xl border border-gray-200 mt-2 max-h-96 overflow-y-auto z-50 hidden">
+                                    <!-- Search results will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button class="nav-link p-3 hover:bg-gray-100 rounded-xl transition-all duration-300 group" data-section="account">
+                            <i class="fas fa-user text-xl text-gray-700 group-hover:text-trendoo-secondary transition-colors"></i>
+                        </button>
+                        <button class="relative nav-link p-3 hover:bg-gray-100 rounded-xl transition-all duration-300 group" data-section="cart">
+                            <i class="fas fa-shopping-cart text-xl text-gray-700 group-hover:text-trendoo-secondary transition-colors"></i>
+                            <span id="cartCount" class="absolute -top-1 -right-1 bg-gradient-to-r from-trendoo-secondary to-orange-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-semibold hidden shadow-lg">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Home Screen -->
+        <section id="home-screen" class="screen active animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl mb-12">
+                <div class="absolute inset-0 bg-gradient-to-br from-trendoo-primary via-trendoo-accent to-trendoo-secondary"></div>
+                
+                <!-- Trendoo Logo as subtle background watermark -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <img src="https://i.postimg.cc/vZ9Rb5Z9/Trendoo.png" 
+                             alt="Trendoo Logo" 
+                             class="w-2/3 h-2/3 object-contain">
+                    </div>
+                </div>
+                
+                <div class="relative z-10 px-8 py-16 md:px-16 md:py-24">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <!-- Content Section -->
+                        <div class="max-w-2xl">
+                            <div class="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white mb-6">
+                                <i class="fas fa-rocket text-trendoo-secondary mr-2"></i>
+                                <span class="text-sm font-medium">Grand Opening</span>
+                            </div>
+                            <h2 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+                                <span class="text-trendoo-secondary">Launching Offer</span> On Premium Collection
+                            </h2>
+                            <p class="text-xl text-gray-200 mb-8 leading-relaxed">
+                                Discover our exclusive collection of premium sneakers and luxury watches. Be among the first to experience the ultimate in style and quality.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button class="bg-trendoo-secondary text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-orange-600 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/25 hover:-translate-y-1">
+                                    <i class="fas fa-shopping-bag mr-2"></i>Shop Now
+                                </button>
+                                <button class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/20 transition-all duration-300 border border-white/20">
+                                    <i class="fas fa-crown mr-2"></i>Watch Collection
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Logo/Image Section -->
+                        <div class="flex justify-center lg:justify-end">
+                            <div class="relative">
+                                <div class="w-80 h-80 bg-white/10 backdrop-blur-sm rounded-3xl p-8 flex items-center justify-center shadow-2xl border border-white/20">
+                                    <img src="https://i.postimg.cc/vZ9Rb5Z9/Trendoo.png" 
+                                         alt="Trendoo Logo" 
+                                         class="w-full h-full object-contain filter drop-shadow-2xl">
+                                </div>
+                                <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-trendoo-secondary to-orange-600 rounded-full flex items-center justify-center shadow-xl">
+                                    <i class="fas fa-gem text-white text-2xl"></i>
+                                </div>
+                                <div class="absolute -bottom-4 -left-4 w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/30">
+                                    <i class="fas fa-star text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute right-0 top-0 w-1/2 h-full opacity-10">
+                    <div class="absolute inset-0 bg-gradient-to-l from-trendoo-secondary to-transparent"></div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="mb-16">
+                <div class="text-center mb-12">
+                    <h3 class="text-4xl font-bold text-trendoo-primary mb-4">Shop by Category</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Explore our curated collection of premium sneakers and luxury timepieces from the world's most prestigious brands.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Sneakers -->
+                    <div class="group bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-500 hover-lift border border-gray-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4">
+                                <i class="fas fa-running text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold text-trendoo-primary">Sneakers</h4>
+                                <p class="text-gray-600">Premium athletic & lifestyle footwear</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="nike">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Nike</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="air-jordan">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Air Jordan</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="adidas">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Adidas</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="louis-vuitton">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Louis Vuitton</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Watches -->
+                    <div class="group bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-500 hover-lift border border-gray-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center mr-4">
+                                <i class="fas fa-clock text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-bold text-trendoo-primary">Luxury Watches</h4>
+                                <p class="text-gray-600">Premium timepieces & accessories</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="rolex">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Rolex</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="casio">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Casio</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="armani">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Armani</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="richard-mille">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Richard Mille</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="hublot">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Hublot</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="rado">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Rado</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="navi-force">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Navi Force</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="omega">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Omega</span>
+                                </div>
+                            </button>
+                            <button class="category-btn group/item p-3 rounded-2xl border-2 border-gray-100 hover:border-trendoo-secondary hover:bg-gradient-to-br hover:from-trendoo-secondary hover:to-orange-600 hover:text-white transition-all duration-300 hover:scale-105" data-category="jacob-co">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle mr-2 group-hover/item:scale-110 transition-transform"></i>
+                                    <span class="font-semibold text-sm">Jacob & Co</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div>
+                <div class="text-center mb-12">
+                    <h3 class="text-4xl font-bold text-trendoo-primary mb-4">Featured Products</h3>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Handpicked premium items that define style and quality. Limited quantities available.</p>
+                </div>
+                <div id="featuredProducts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Featured products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Collection Screen -->
+        <section id="brand-collection-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 id="brandCollectionTitle" class="text-3xl font-bold text-trendoo-primary mb-2">Brand Collection</h2>
+                    <p id="brandCollectionSubtitle" class="text-gray-600">Discover our curated selection</p>
+                </div>
+                <button class="text-trendoo-secondary hover:text-orange-600" onclick="goBackToHome()">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+            </div>
+
+            <!-- Brand Hero Section -->
+            <div id="brandHero" class="bg-gradient-to-r from-trendoo-primary to-trendoo-accent text-white rounded-3xl p-8 mb-8">
+                <div class="flex items-center space-x-6">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i id="brandIcon" class="fas fa-crown text-3xl text-trendoo-secondary"></i>
+                    </div>
+                    <div>
+                        <h3 id="brandHeroTitle" class="text-3xl font-bold mb-2">Brand Name</h3>
+                        <p id="brandHeroDescription" class="text-gray-200">Premium collection description</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brand Products -->
+            <div id="brandProducts" class="brand-products-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Brand products will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Product List Screen -->
+        <section id="product-list-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="productListTitle" class="text-2xl font-bold">Products</h2>
+                <button class="text-trendoo-secondary hover:text-orange-600" onclick="showScreen('home')">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <select id="categoryFilter" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-trendoo-secondary">
+                        <option value="">All Categories</option>
+                        <option value="sneakers">Sneakers</option>
+                        <option value="watches">Watches</option>
+                    </select>
+                    <select id="brandFilter" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-trendoo-secondary">
+                        <option value="">All Brands</option>
+                    </select>
+                    <select id="priceFilter" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-trendoo-secondary">
+                        <option value="">Price Range</option>
+                        <option value="0-100">$0 - $100</option>
+                        <option value="100-500">$100 - $500</option>
+                        <option value="500-1000">$500 - $1000</option>
+                        <option value="1000+">$1000+</option>
+                    </select>
+                    <select id="sortBy" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-trendoo-secondary">
+                        <option value="name">Sort by Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Rating</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Product Details Screen -->
+        <section id="product-details-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Product Details</h2>
+                <button class="text-trendoo-secondary hover:text-orange-600" onclick="goBackToList()">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Products
+                </button>
+            </div>
+            <div id="productDetails" class="bg-white rounded-xl shadow-lg p-6">
+                <!-- Product details will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Cart Screen -->
+        <section id="cart-screen" class="screen hidden animate-fade-in">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-4xl font-bold text-trendoo-primary mb-2">Shopping Cart</h2>
+                    <p class="text-gray-600">Review your selected items before checkout</p>
+                </div>
+                <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:shadow-lg" onclick="goBackToHome()">
+                    <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
+                </button>
+            </div>
+            <div id="cartContent" class="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+                <!-- Cart items will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Checkout Screen -->
+        <section id="checkout-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Checkout</h2>
+                <button class="text-trendoo-secondary hover:text-orange-600" onclick="showScreen('cart')">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Cart
+                </button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div id="checkoutForm" class="bg-white rounded-xl shadow-lg p-6">
+                    <!-- Checkout form will be loaded here -->
+                </div>
+                <div id="orderSummary" class="bg-white rounded-xl shadow-lg p-6">
+                    <!-- Order summary will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Login/Signup Screen -->
+        <section id="auth-screen" class="screen hidden animate-fade-in">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+                    <div class="bg-gradient-to-br from-trendoo-primary to-trendoo-accent p-8 text-white text-center">
+                        <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-gem text-3xl text-trendoo-secondary"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-2">Welcome to Trendoo</h2>
+                        <p class="text-gray-200">Sign in to your account or create a new one to start shopping</p>
+                    </div>
+                    <div class="p-8">
+                        <div id="authContent">
+                            <!-- Login/Signup forms will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-trendoo-primary text-white py-8 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-trendoo-secondary">Trendoo</h3>
+                    <p class="text-gray-300">Premium sneakers and luxury watches for the discerning customer.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Sneakers</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Watches</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-trendoo-secondary transition-colors">Sale</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-phone mr-2"></i>+8801640475515</li>
+                        <li><i class="fas fa-envelope mr-2"></i>trendoo.ownyouryouth@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Dhaka, Bangladesh</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Trendoo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="scroll-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
